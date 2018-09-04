@@ -30,3 +30,9 @@ social:
 avatar:
   url: /images/avatar.jpg
 
+gitment:
+  enable: true
+  github_user: tcye # MUST HAVE, Your Github Username
+  github_repo: 'tcye.github.io' # MUST HAVE, The name of the repo you use to store Gitment comments
+  client_id: 57f037ffaa60e3bf123e # MUST HAVE, Github client id for the Gitment
+  client_secret: 617177fcc5fdb173d6d61f6a6927890ed1aad101 # EITHER this or proxy_gateway, Github access secret token for the Gitment

@@ -1,8 +1,9 @@
 ---
 title: 常用Markdown语法备忘
-date: 2017-05-15 13:30:35
 tags: markdown
 categories: misc
+abbrlink: a4f440d3
+date: 2017-05-15 13:30:35
 ---
 
 ### 公式

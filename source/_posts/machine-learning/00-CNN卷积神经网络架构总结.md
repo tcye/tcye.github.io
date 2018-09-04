@@ -1,7 +1,8 @@
 ---
 title: CNN卷积神经网络架构总结
-date: 2017-09-29 13:30:35
 categories: machine-learning
+abbrlink: 8b256d5e
+date: 2017-09-29 13:30:35
 ---
 
 **注：本文将会以论文读后笔记的形式呈现，后续不断补充占坑**
