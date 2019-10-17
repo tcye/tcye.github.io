@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.4.0" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+  <link rel="alternate" href="/atom.xml" title="Tiancai's Blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="硕士期间也是做传统视觉相关的研究，但自己并没有选择继续读博，而是选择去了网易游戏 工作。工作这两年，一来对做游戏逻辑感到枯燥厌恶，二来也在媒体的推波助澜下见识了 深度学习横扫计算机视觉界的威风，很多以前看似很难的视觉任务，突然都变得简单，所以， 摩拳擦掌又想回去做计算机视觉。进入BIGO做了一段时间，发现自己做的还不错，深度学习 入门的很快，所以在这里记录下自己的入坑经历，希望可以帮到也有类似想法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习入坑指南">
+<meta property="og:url" content="http://tcye.github.io/posts/a30f8eef/index.html">
+<meta property="og:site_name" content="Tiancai&#39;s Blog">
+<meta property="og:description" content="硕士期间也是做传统视觉相关的研究，但自己并没有选择继续读博，而是选择去了网易游戏 工作。工作这两年，一来对做游戏逻辑感到枯燥厌恶，二来也在媒体的推波助澜下见识了 深度学习横扫计算机视觉界的威风，很多以前看似很难的视觉任务，突然都变得简单，所以， 摩拳擦掌又想回去做计算机视觉。进入BIGO做了一段时间，发现自己做的还不错，深度学习 入门的很快，所以在这里记录下自己的入坑经历，希望可以帮到也有类似想法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-17T07:07:02.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习入坑指南">
+<meta name="twitter:description" content="硕士期间也是做传统视觉相关的研究，但自己并没有选择继续读博，而是选择去了网易游戏 工作。工作这两年，一来对做游戏逻辑感到枯燥厌恶，二来也在媒体的推波助澜下见识了 深度学习横扫计算机视觉界的威风，很多以前看似很难的视觉任务，突然都变得简单，所以， 摩拳擦掌又想回去做计算机视觉。进入BIGO做了一段时间，发现自己做的还不错，深度学习 入门的很快，所以在这里记录下自己的入坑经历，希望可以帮到也有类似想法">
+  <link rel="canonical" href="http://tcye.github.io/posts/a30f8eef/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>深度学习入坑指南 | Tiancai's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tiancai's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://tcye.github.io/posts/a30f8eef/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tiancai Ye">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiancai's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">深度学习入坑指南
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-09-25 16:30:35" itemprop="dateCreated datePublished" datetime="2017-09-25T16:30:35+08:00">2017-09-25</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-17 15:07:02" itemprop="dateModified" datetime="2019-10-17T15:07:02+08:00">2019-10-17</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>硕士期间也是做传统视觉相关的研究，但自己并没有选择继续读博，而是选择去了网易游戏
+工作。工作这两年，一来对做游戏逻辑感到枯燥厌恶，二来也在媒体的推波助澜下见识了
+深度学习横扫计算机视觉界的威风，很多以前看似很难的视觉任务，突然都变得简单，所以，
+摩拳擦掌又想回去做计算机视觉。进入BIGO做了一段时间，发现自己做的还不错，深度学习
+入门的很快，所以在这里记录下自己的入坑经历，希望可以帮到也有类似想法的同学吧。</p>
+<a id="more"></a>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>2017年8月28日，我正式入职Bigo Live，离开曾经奋斗了两年的网易游戏，从零开始，转
+行做了一名机器学习算法工程师。至于为什么我会突然转行去做机器学习，我在
+<a href="https://tcye.github.io/about/"><strong>这里</strong></a>有写到。总之，2017年对于我是动荡的一年
+，结了婚（哈哈，从此家里多了一只小燕子），买了房，然后还换了工作，这所有一切都
+发生在短短几个月内。其实结婚买房前，我都是想好好继续在网易游戏干下去的，毕竟收
+入不错也还算稳定，工作室有着极其活跃的氛围和宽松简单的人际关系（虽然加班有点多
+）。然而了解我的人就知道，我从来不是一个安于现状的人，在6月份的某一天，我就决定
+了，我要转行去做AI！</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>其实对于机器学习我是有一定基础的，然而从毕业开始算，已时隔两年，期间做了两年
+3D MMO手游，可想而知，即使我能把知识全放进一块移动硬盘保存起来，现在想找到那块
+移动硬盘，恐怕也有点费力了。。。</p>
+<p>第一步，数学基础。复习了一遍线性代数，教材
+<a href="http://math.mit.edu/~gs/linearalgebra/" target="_blank" rel="noopener">Introduction to Linear Algebra</a>，因为
+上研时读过这本书，所以捡起来比较快，我大概花了一个周末两天时间过了一遍线代。然
+后就没有了，其实对于机器学习，有线代基础就足以入门了，其他数学知识并非必须，比
+如概率论，我认为只是对于机器学习理论的一种解释而已，如果你只是把机器学习当做一
+个拟合已有数据的优化问题，那么暂时不管概率论也完全没问题，更何况有些模型，比如
+神经网络，本来也没有一个概率上的解释。</p>
+<p>第二步，机器学习基础。使用了李航的
+<a href="https://book.douban.com/subject/10590856/" target="_blank" rel="noopener">统计学习方法</a>，同时配合周志华的
+<a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/MLbook2016.htm" target="_blank" rel="noopener">西瓜书</a>
+。注意：《统计学习方法》的第一章非常重要！一定要仔细阅读，确保自己理解到位了，
+尤其是统计学习三要素，这是后面所有模型的基础。然后要重点理解线性回归、逻辑斯蒂
+回归、SVM，并尝试梳理三者的联系和关系！一旦这一步做到位了，对于后面神经网络的学
+习将会大有裨益。</p>
+<p>第三步，深度学习。真的，这一步啥都不要看，如果你没有任何基础的话，老老实实从
+stanford的<a href="http://cs231n.stanford.edu/syllabus.html" target="_blank" rel="noopener">cs231n</a>的视频一路看下来即
+可。这一步其实我走了很多弯路，最后才发现，cs231n才是良心啊！有热心朋友已经从墙
+外把视频搬到了
+<a href="https://www.bilibili.com/video/av13260183/?from=search&amp;seid=3316462347725890303" target="_blank" rel="noopener">哔哩哔哩</a>，
+大家认真学习即可！真的，看了这个还学不会，你来打我！（真的没想到自己会有一天在
+B站搞学习！）</p>
+<h2 id="行动"><a href="#行动" class="headerlink" title="行动"></a>行动</h2><p>我认为学习任何事情，都要有实际应用场景，并不断操练才可以，所以不管怎样，我必须先
+找一份机器学习的工作做起来，否则永远也只是纸上谈兵！广州的互联网氛围还是没有北京
+好啊，看了下脉脉，在招机器学习岗位的单位大概只有这么几家：腾讯微信、阿里UC、欢聚时代
+（YY）、图谱科技。</p>
+<p>微信当时正成立了搜索部门，于是找了个中科院的师兄帮忙内推了一下，结果准备不充分
+，而且他们可能更需要NLP相关的，说研究生的图像相关经历也聊不拢，面了两面就挂掉了。。。</p>
+<p>阿里UC有推荐相关的岗位，然而并没有人帮忙内推，投了官网简历了无音讯。。。</p>
+<p>图谱科技主要做深度学习鉴黄相关的，理论上应该蛮对口，然而并不认识人。。。去拉钩
+投了他们的一份简历，过了大概一两周才给了回复，不是让我去面试，是让我先做一份在
+线笔试题。。。由于当时已经差不多快拿到BIGO的Offer了，所以我就没有尝试了。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>其实转行最难的一步是有一个可以接纳你的地方。如果不是BIGO收留我，恐怕也会很难成功转行。
+最近这段时间的变动暂时记录到这里，希望以后能有更多进步吧，同时总结更多算法方面
+的经验到博客中。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/posts/a4f440d3/" rel="next" title="常用Markdown语法备忘">
+                  <i class="fa fa-chevron-left"></i> 常用Markdown语法备忘
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/posts/8b256d5e/" rel="prev" title="CNN卷积神经网络架构总结">
+                  CNN卷积神经网络架构总结 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动机"><span class="nav-number">1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行动"><span class="nav-number">3.</span> <span class="nav-text">行动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.jpg"
+      alt="Tiancai Ye">
+  <p class="site-author-name" itemprop="name">Tiancai Ye</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/tcye" title="GitHub &rarr; https://github.com/tcye" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:tiancai.ye@outlook.com" title="E-Mail &rarr; mailto:tiancai.ye@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tiancai Ye</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '57f037ffaa60e3bf123e',
+      clientSecret: '617177fcc5fdb173d6d61f6a6927890ed1aad101',
+      repo: 'tcye.github.io',
+      owner: 'tcye',
+      admin: ['tcye'],
+      id: '35dd916b02cb1c466b078d4951663b53',
+        language: window.navigator.language || window.navigator.userLanguage,
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>
