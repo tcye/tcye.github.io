@@ -71,7 +71,7 @@ stylus:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:tcye/tcye.github.io.git
+  repo: https://github.com/tcye/tcye.github.io.git
   branch: master
   message: auto deploy
 
